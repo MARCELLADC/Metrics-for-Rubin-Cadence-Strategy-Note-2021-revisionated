@@ -1,10 +1,65 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
-"""
-Created on Wed Apr 21 18:08:32 2021
+#This metric  perform the fit of phased light curve  with a given numberOfHarmonics and compute  the dimension of the max distance from two consecutive phases of the light curve in each band and the  number gaps larger than factorForDimensionGap 
+# Input:
+# data is a dictionary were the time and mag of all bands are stored.
+# data={'timeu':time in u Band , 'timeg':time in g Band ,'timer':time in r Band ,
+#       'timei':time in i Band ,'timez':time in z Band ,'timez':time in z Band ,
+#       'magu': mag in u Band,'magg': mag in g Band,'magr': mag in r Band,
+#       'magi': mag in i Band,'magz': mag in z Band,'magy': mag in y Band}
+#
+# index is a dictionary where are stored the index of general mag array where the saturation is not present.
+# index{'ind_notsaturated_u': index of not saturated measurements for u band,
+#      'ind_notsaturated_u': index of not saturated measurements for u band,
+#      'ind_notsaturated_g': index of not saturated measurements for g band,
+#      'ind_notsaturated_r': index of not saturated measurements for r band,
+#      'ind_notsaturated_i': index of not saturated measurements for i band,
+#      'ind_notsaturated_z': index of not saturated measurements for z band,}   
+#
+# period is the period of the lc. It is a double
+# numberOfHarmonics is an integer and defines the number of harmonics of the model fit    
+# factorForDimensionGap is a double that multiplyes the max distance from two consecutive phases of the light curve. Used to count the gap in 
+# the light curve, should be < 1. 
+# label is a label to identify the plots of the results.
+# outDir is a String identifying the directory where to store the results. 
+#
+# Output:
+# - multi panel plot with the modelled lc, saved in a file in the outputdir
+# - a dictinary with the  finalResult:
+# finalResult={'mean_u':mean magnitude in u band,'mean_g':mean magnitude in g band,'mean_r':mean magnitude in r band,
+#              'mean_i':'mean magnitude in i band,'mean_z':mean magnitude in z band,'mean_y':mean magnitude in y band,
+#              'ampl_u':amplitude in u,'ampl_g':amplitude in g band,'ampl_r':amplitude in r band,
+#                 'ampl_i':amplitude in i band,'ampl_z':amplitude in z band,'ampl_y':amplitude in y band,
+#                 'chi_u': chi squared of the model fitting in u band,'chi_g':chi squared of the model fitting in g band,
+#                 'chi_r':chi squared of the model fitting in r band,
+#                 'chi_i':chi squared of the model fitting in i band,'chi_z':chi squared of the model fitting in z band,
+#                 'chi_y':chi squared of the model fitting in y band,
+#                  'fittingParametersAllband': model fitting of all bands dictinary*, 
+#                  'maxHoleDimension_u': max dimension of the gap in u band,
+#                  'maxHoleDimension_g': max dimension of the gap in g band, 
+#                  'maxHoleDimension_r': max dimension of the gap in r band,,
+#                  'maxHoleDimension_i': max dimension of the gap in i band,,
+#                  'maxHoleDimension_z': max dimension of the gap in z band,,
+#                  'maxHoleDimension_y': max dimension of the gap in z band,
+#                  'numberOfHoles_u': number of gaps of the light curve in the u band,
+#                  'numberOfHoles_g':number of gaps of the light curve in the g band,
+#                  'numberOfHoles_r':number of gaps of the light curve in the r band,
+#                  'numberOfHoles_i':number of gaps of the light curve in the i band,
+#                  'numberOfHoles_z':number of gaps of the light curve in the z band,
+#                  'numberOfHoles_y':number of gaps of the light curve in the y band}   
+    
+# * model fit dictionary:
+# results={'u':fit parameters** for u band,'g':fit parameters for g band,'r':fit parameters for r band,
+#           'i':fit parameters for i band,'z':fit parameters for z,'y':fit parameters for y band,
+#           'chi_u': chi squared of the model fitting in u band,'chi_g':chi squared of the model fitting in g band,
+#                 'chi_r':chi squared of the model fitting in r band,
+#                 'chi_i':chi squared of the model fitting in i band,'chi_z':chi squared of the model fitting in z band,
+#                 'chi_y':chi squared of the model fitting in y band,}  
 
-@author: silvioleccia
-"""
+#** fit parameters: it is an array with dimension= 2*harmonics+2, with this structure= [period,zp,amplitude1,amplitude2,..., phase1,phase2,....]
+
+
+
 
 import numpy as np
 from scipy import stats as stat
@@ -282,65 +337,6 @@ def check(data,period,index,factor1):
 
 
 
-# Input:
-# data is a dictionary were the time and mag of all bands are stored.
-# data={'timeu':time in u Band , 'timeg':time in g Band ,'timer':time in r Band ,
-#       'timei':time in i Band ,'timez':time in z Band ,'timez':time in z Band ,
-#       'magu': mag in u Band,'magg': mag in g Band,'magr': mag in r Band,
-#       'magi': mag in i Band,'magz': mag in z Band,'magy': mag in y Band}
-#
-# index is a dictionary where are stored the index of general mag array where the saturation is not present.
-# index{'ind_notsaturated_u': index of not saturated measurements for u band,
-#      'ind_notsaturated_u': index of not saturated measurements for u band,
-#      'ind_notsaturated_g': index of not saturated measurements for g band,
-#      'ind_notsaturated_r': index of not saturated measurements for r band,
-#      'ind_notsaturated_i': index of not saturated measurements for i band,
-#      'ind_notsaturated_z': index of not saturated measurements for z band,}   
-#
-# period is the period of the lc. It is a double
-# numberOfHarmonics is an integer and defines the number of harmonics of the model fit    
-# factorForDimensionGap is a double that multiplyes the max distance from two consecutive phases of the light curve. Used to count the gap in 
-# the light curve, should be < 1. 
-# label is a label to identify the plots of the results.
-# outDir is a String identifying the directory where to store the results. 
-#
-# Output:
-# - multi panel plot for lc modeled, saved in a file in the outputdir
-# - a dictinary with the  finalResult:
-# finalResult={'mean_u':mean magnitude in u band,'mean_g':mean magnitude in g band,'mean_r':mean magnitude in r band,
-#              'mean_i':'mean magnitude in i band,'mean_z':mean magnitude in z band,'mean_y':mean magnitude in y band,
-#              'ampl_u':amplitude in u,'ampl_g':amplitude in g band,'ampl_r':amplitude in r band,
-#                 'ampl_i':amplitude in i band,'ampl_z':amplitude in z band,'ampl_y':amplitude in y band,
-#                 'chi_u': chi squared of the model fitting in u band,'chi_g':chi squared of the model fitting in g band,
-#                 'chi_r':chi squared of the model fitting in r band,
-#                 'chi_i':chi squared of the model fitting in i band,'chi_z':chi squared of the model fitting in z band,
-#                 'chi_y':chi squared of the model fitting in y band,
-#                  'fittingParametersAllband': model fitting of all bands dictinary*, 
-#                  'maxHoleDimension_u': max dimension of the gap in u band,
-#                  'maxHoleDimension_g': max dimension of the gap in g band, 
-#                  'maxHoleDimension_r': max dimension of the gap in r band,,
-#                  'maxHoleDimension_i': max dimension of the gap in i band,,
-#                  'maxHoleDimension_z': max dimension of the gap in z band,,
-#                  'maxHoleDimension_y': max dimension of the gap in z band,
-#                  'numberOfHoles_u': number of gaps of the light curve in the u band,
-#                  'numberOfHoles_g':number of gaps of the light curve in the g band,
-#                  'numberOfHoles_r':number of gaps of the light curve in the r band,
-#                  'numberOfHoles_i':number of gaps of the light curve in the i band,
-#                  'numberOfHoles_z':number of gaps of the light curve in the z band,
-#                  'numberOfHoles_y':number of gaps of the light curve in the y band}   
-    
-# * model fit dictionary:
-# results={'u':fit parameters** for u band,'g':fit parameters for g band,'r':fit parameters for r band,
-#           'i':fit parameters for i band,'z':fit parameters for z,'y':fit parameters for y band,
-#           'chi_u': chi squared of the model fitting in u band,'chi_g':chi squared of the model fitting in g band,
-#                 'chi_r':chi squared of the model fitting in r band,
-#                 'chi_i':chi squared of the model fitting in i band,'chi_z':chi squared of the model fitting in z band,
-#                 'chi_y':chi squared of the model fitting in y band,}  
-
-#** fit parameters: it is an array with dimension= 2*harmonics+2, with this structure= [period,zp,amplitude1,amplitude2,..., phase1,phase2,....]
-
-
-
 
 
 
@@ -427,21 +423,7 @@ def computation(data,index,period,numberOfHarmonics,factorForDimensionGap,label,
     plotting(data,fitting,period,label,zeroTimeRef,outDir)
     quality=check(data,period,index,factorForDimensionGap)
     
-    #finalResult={'DeltaMean_u':DeltaMean_u,'DeltaMean_g':DeltaMean_g,'DeltaMean_r':DeltaMean_r,
-    #             'DeltaMean_i':DeltaMean_i,'DeltaMean_z':DeltaMean_z,'DeltaMean_y':DeltaMean_y,
-    #             'DeltaAmpl_u':DeltaAmpl_u,'DeltaAmpl_g':DeltaAmpl_g,'DeltaAmpl_r':DeltaAmpl_r,
-    #             'DeltaAmpl_i':DeltaAmpl_i,'DeltaAmpl_z':DeltaAmpl_z,'DeltaAmpl_y':DeltaAmpl_y,
-    #             'DeltaSkew_u':DeltaSkew_u,'DeltaSkew_g':DeltaSkew_g,'DeltaSkew_r':DeltaSkew_r,
-    #             'DeltaSkew_i':DeltaSkew_i,'DeltaSkew_z':DeltaSkew_z,'DeltaSkew_y':DeltaSkew_y,
-    #             'chi_u':fitting['chi_u'],'chi_g':fitting['chi_g'],'chi_r':fitting['chi_r'],
-    #             'chi_i':fitting['chi_i'],'chi_z':fitting['chi_z'],'chi_y':fitting['chi_y'],
-    #              'fittingParametersAllband':fitting, 'maxHoleDimension_u': quality['maxHole_u'],
-    #              'maxHoleDimension_g': quality['maxHole_g'],'maxHoleDimension_r': quality['maxHole_r'],
-    #              'maxHoleDimension_i': quality['maxHole_i'],'maxHoleDimension_z': quality['maxHole_z'],
-    #              'maxHoleDimension_y': quality['maxHole_y'],'numberOfHoles_u':quality['numberHoles_u'],
-    #              'numberOfHoles_g':quality['numberHoles_g'],'numberOfHoles_r':quality['numberHoles_r'],
-    #              'numberOfHoles_i':quality['numberHoles_i'],'numberOfHoles_z':quality['numberHoles_z'],
-    #              'numberOfHoles_y':quality['numberHoles_y']}
+    
     finalResult={'mean_u':meanMag_u,'mean_g':meanMag_g,'mean_r':meanMag_r,
                  'mean_i':meanMag_i,'mean_z':meanMag_z,'mean_y':meanMag_y,
                  'ampl_u':ampl_u,'ampl_g':ampl_g,'ampl_r':ampl_r,
