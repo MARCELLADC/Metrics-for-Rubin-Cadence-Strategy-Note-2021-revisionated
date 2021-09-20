@@ -3,14 +3,13 @@ Here you can find three  new metrics build for our Cadence Note 2021:
 
 
 Classical variable stars in different Galactic environments: pulsation behaviour recovery.
+(https://docushare.lsst.org/docushare/dsweb/Get/Document-37629/Pulsating_stars.pdf )
 
+Authors:Di Criscienzo,Braga, Leccia
 
-https://docushare.lsst.org/docushare/dsweb/Get/Document-37629/Pulsating_stars.pdf 
+(Little changes was performed from April 2021 up to now)
 
-
-Little changes was performed from April 2021 to now
-
-Description:
+Short description of files in this directory.
 
 
 LcConstructorLAST.py
@@ -32,13 +31,22 @@ This metric perform  the fit of the observed light curve in each band through th
 This last metric gives The differences of the quantities  computed by the fitting with respect to those of the input light curve (Delta mean mag and Delta Amplitude) andd other important parameters useful, in our consideration, to judge the simulation
 Tested on AstroDataLab.
 
-The directory also contains two notebook:
+The directory also contains:
 
-Notebook_example which show how to use theese three metrics;
+---Notebook_example.ipynb a notebook that  show how to use theese three metrics;
 
-Notebook_iterate which use the three metrics described above  in a FOR cycle to compare results obtained with  different Opsim and number of years;
+---Notebook_iterateipynb a notebook which use the three metrics described above  in a FOR cycle useful to compare results obtained with  different Opsim and number of years;
+
+--->an  asciifile with the temporal series as computed by LcConstructorLAST.py (FILES/XXXXX)
+
+--->Multiplot figure produced by  LcConstructorLAST.py (XXXXX), LcPeriod (XXXXX) and LcFittingLAST (XXXXX)
+ 
+---> All_results.csv asciifile  produced by Notebook_iterate with all the results for two different Opsim and finish year.
+
+--->files with the template of 6 different variable stars (RRab.csv,RRc.csv,CEF1.csv,CEF2.csv, LPV1.csv,LPV2.csv)
 
 
-Comments are welcome.
+Comments are welcome. 
+Tested on Data Astro Lab
 
 
