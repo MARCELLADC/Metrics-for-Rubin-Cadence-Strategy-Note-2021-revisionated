@@ -34,11 +34,11 @@ The directory also contains:
 
 -->Notebook_iterateipynb :a notebook which use the three metrics described above  in a FOR cycle useful to compare results obtained with  different Opsim and number of years;
 
--->FILES/XXXXX:an  asciifile with the temporal series as computed by LcConstructorLAST.py 
+-->FILES/RRc_ra072.00dec-70.93dm18.5ebv0.08y0y2_footprint_add_mag_cloudsv1.5_10yrs.db.csv  :an  asciifile with the temporal series as computed by LcConstructorLAST.py 
 
--->Multiplot figure produced by  LcConstructorLAST.py (XXXXX), LcPeriod (XXXXX) and LcFittingLAST (XXXXX)
+-->Multiplot figure produced by  LcConstructorLAST.py (LCnoised_RRc_ra072.00dec-70.93dm18.5ebv0.08y0y2_footprint_add_mag_cloudsv1.5_10yrs.db.pdf), LcPeriod (Period_RRc_ra072.00dec-70.93dm18.5ebv0.08y0y2_footprint_add_mag_cloudsv1.5_10yrs.db.pdf) and LcFittingLAST (LcFitting_RRc_ra072.00dec-70.93dm18.5ebv0.08y0y2_footprint_add_mag_cloudsv1.5_10yrs.db.pdf)
  
---> All_results.csv: asciifile  produced by Notebook_iterate with all the results for two different Opsim and finish year.
+--> Allresults.csv: asciifile  produced by Notebook_iterate with all the results for two different Opsim and finish year.
 
 -->files with the template of 6 different variable stars (RRab.csv,RRc.csv,CEF1.csv,CEF2.csv, LPV1.csv,LPV2.csv)
 
