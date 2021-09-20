@@ -32,18 +32,24 @@ from SaturationStacker import SaturationStacker
     # input:
     # ra: right ascension of the target. It is a double in degrees
     # dec: declination of the target. It is a double in degrees
-    # Ebv: it is the reddening. It is a double
-    # Runname: it is the RunName for the Bundle. It is a sting. For example: 'footprint_big_wfdv1.5_10yrs.db'
-    # Dbfile: it is the file of the simulation. It is a string. For example: '/sims_maf/fbs_1.5/footprints/footprint_big_wfdv1.5_10yrs.db'
-    # yearsStar: it is an integer describing the start year for simulation. 
-    # yearsFinish:  it is an integer describing the final year for simulation.
-    # filenameModel: it is the name of the file where the theoretical model of the look at the te.mplates to see how they should be doneLooDEL MODELLO COME DEVE ESSERE generato.
-    # numberOfSigmaToNoisingLc: it is the number of sigma where generate the noise for the simulated light curve. It is an integer:if 0 the lc where be not noised
-    # outputDir: the directory where to store the outputs. It is a string.
+    # Ebv: reddening. It is a double
+    # Runname: this is the RunName for the Bundle. It is a string. For example: 'footprint_big_wfdv1.5_10yrs.db'
+    # Dbfile: this is the file of the simulation. It is a string. For example: '/sims_maf/fbs_1.5/footprints/footprint_big_wfdv1.5_10yrs.db'
+    # yearsStar:  an integer describing the start year for simulation. 
+    # yearsFinish:  an integer describing the final year for simulation.
+    # filenameModel: name of the file with  the theoretical model (before the point)
+    # numberOfSigmaToNoisingLc: the number of sigma used to generate the noise for the simulated light curve. It is an integer:if 0 the lc will be not noised
+    # outputDir: the directory where to store the generated figure with the light curves. It is a string.
     # optionPlot: boolean (True, False) - true if you want plots of phased light curves.
+    # outputDir2: the directory where to store the generated file ascii with the temporal series. It is a string.
+    # optionFile: boolean (True, False) - true if you want plots of phased light curves.
+    # modelName: name of the file with  the theoretical model (after the point)
+    # do_remove_saturated: boolean (True, False) - true if you want to remove from the plots the saturated visits (computed with saturation_stacker)
     # 
-    # Output: LCurves (noised and not) to describe as dictionary
-    # Description:
+    # 
+    # Output: 
+    # Temporal series (ascii file in outputDir2 (MJD, theorical mag, simulated mag, flag_sat (1 if saturated), flag_det (1 if s/n <5) ), Light curve (multipanel plot in outputDir) and a  dictionary:
+    #
     # LC={'timeu':epoch in u band,'timeg':epoch in g,
     #            'timer':epoch in r,'timei':epoch in i,
     #            'timez':epoch in z,
@@ -55,8 +61,10 @@ from SaturationStacker import SaturationStacker
     #            'mag_all':list of the simulated magnitude for all bands sorted chronologically, 'time_all':list of the mean epochs for all the observations sorted chronologically,
     #            'dmag_all':list of the noise simulated at one sigma for all the observations sorted chronologically',
     #             noise_all':list of the computed noise (dmag * random double between -1 and 1) for all the observations sorted chronologically}
-    # MultiPanel Plot
+    # 
     # mv SQL output from OpSim query.
+    
+    
 
 def main(ra,dec,distanceMod,Ebv,RunName,Dbfile,yearsStart,
          yearsFinish,filenameModel,numberOfSigmaToNoisingLc,outputDir,optionPlot,
