@@ -1,5 +1,5 @@
 # Cadence-Note-2021
-Here you can find three  new metrics build for Cadence Note 2021:Classical variable stars in different Galactic environments: pulsation behaviour recovery.
+Here you can find three  new metrics build for Rubin Cadence Note 2021:Classical variable stars in different Galactic environments: pulsation behaviour recovery.
 (https://docushare.lsst.org/docushare/dsweb/Get/Document-37629/Pulsating_stars.pdf )
 
 Authors:Di Criscienzo,Braga, Leccia
