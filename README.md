@@ -1,12 +1,11 @@
 # Cadence-Note-2021
-Here you can find three  new metrics build for Rubin Cadence Note 2021:Classical variable stars in different Galactic environments: pulsation behaviour recovery.
+Here you can find three  new metrics build specially for Rubin Cadence Note 2021:Classical variable stars in different Galactic environments: pulsation behaviour recovery.
 (https://docushare.lsst.org/docushare/dsweb/Get/Document-37629/Pulsating_stars.pdf )
 
 Authors:Di Criscienzo,Braga, Leccia
-
 (Little changes was performed from April 2021 up to now)
 
-Short description of files in this directory.
+Short description of files present in this directory.
 
 
 -->LcConstructorLAST.py
@@ -32,7 +31,7 @@ The directory also contains:
 
 -->Notebook_example.ipynb :a notebook that  show how to use theese three metrics;
 
--->Notebook_iterateipynb :a notebook which use the three metrics described above  in a FOR cycle useful to compare results obtained with  different Opsim and number of years;
+-->Notebook_iterate.ipynb :a notebook which use the three metrics described above  in a FOR cycle useful to compare results obtained with  different Opsim and number of years;
 
 -->FILES/RRc_ra072.00dec-70.93dm18.5ebv0.08y0y2_footprint_add_mag_cloudsv1.5_10yrs.db.csv  :an  asciifile with the temporal series as computed by LcConstructorLAST.py 
 
@@ -42,8 +41,12 @@ The directory also contains:
 
 -->files with the template of 6 different variable stars (RRab.csv,RRc.csv,CEF1.csv,CEF2.csv, LPV1.csv,LPV2.csv)
 
+Actually we are working on:
+1)a new definition of gap of Lc
+2)on the style of the file 'Allresults'
+
 
 Comments are welcome. 
-Tested on Data Astro Lab
+Tested on Data Astro Lab (with Kernel LSST SIM MAF(Py3,w.2021.14)
 
 
