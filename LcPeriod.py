@@ -1,3 +1,5 @@
+#This metric use Gatspy (https://arxiv.org/abs/1502.01344)) to recover the period of the simulated temporal series. Produce a multipanel plot and return:
+#best period, period_model-best_period/best_period and period_model-best_period/best_period*1/number of cycles 
 import matplotlib.pyplot as plt 
 from gatspy import periodic
 import numpy as np
