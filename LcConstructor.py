@@ -1,10 +1,10 @@
-#!/usr/bin/env python3
 # -*- coding: utf-8 -*-"""""
 
 from __future__ import print_function
 import os
 import numpy as np
 import matplotlib.pyplot as plt
+ 
 import lsst.sims.maf.utils.astrometryUtils 
 import lsst.sims.maf.db.opsimDatabase
 import lsst.sims.maf.slicers as slicers
@@ -45,7 +45,7 @@ from SaturationStacker import SaturationStacker
     # optionFile: boolean (True, False) - true if you want plots of phased light curves.
     # modelName: name of the file with  the theoretical model (after the point)
     # do_remove_saturated: boolean (True, False) - true if you want to remove from the plots the saturated visits (computed with saturation_stacker)
-    # perc_blend: percentage of mean flux to be added to flux in each band and visit. 0 = no blend
+    # perc_blend: percentage of mean flux that will be added to flux in each band and visit. 0 = no blend
     
     # 
     # 
@@ -110,7 +110,7 @@ def main(ra,dec,distanceMod,Ebv,RunName,Dbfile,yearsStart,
     
 #SNR retrieving from mv.
 
-    snr=retrieveSnR(mv,lcTheoric_blend)       
+    snr=retrieveSnR(mv,lcTheoric)       
     
 #definition of time and filters from simulation and add the noise
 
@@ -118,7 +118,7 @@ def main(ra,dec,distanceMod,Ebv,RunName,Dbfile,yearsStart,
     filters_lsst=np.asarray(mv['filter'])
 
     LcTeoLSST=generateLC(time_lsst,filters_lsst,lcTheoric_blend)
-    LcTeoLSST_noised=noising(LcTeoLSST,snr,nSigma)
+    LcTeoLSST_noised=noising(LcTeoLSST,snr,nSigma,perc_blend)
     
     index_notsaturated=count_saturation(mv,LcTeoLSST_noised,do_remove_saturated)
     saturation_index_u=[1]*len(LcTeoLSST['timeu'])
@@ -513,13 +513,15 @@ def generateLC(time_lsst,filters_lsst,output_ReadLCTeo,period_true=-99,
            'ind_i':ind_i,'ind_z':ind_z,'ind_y':ind_y,'period':period_final}
 
     
-def noising(LcTeoLSST,snr,sigma):
+def noising(LcTeoLSST,snr,sigma,perc_blend):
     
 #noising 
     def noisingBand(timeLSSTteo,magLSSTteo,snr,sigma):
         magNoised=[]
         for j in range(len(timeLSSTteo)):            
             dmag = 2.5*np.log10(1.+1./snr[j])
+            if perc_blend>0:
+                dmag=np.sqrt(2)*dmag
             noise = np.random.uniform(-sigma,sigma)*dmag
             magNoisedComp=magLSSTteo[j]+noise
             magNoised.append(magNoisedComp)

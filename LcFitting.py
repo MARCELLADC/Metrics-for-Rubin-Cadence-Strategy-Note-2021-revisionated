@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
+
+
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 #This metric  perform the fit of phased light curve  with a given numberOfHarmonics and compute  the dimension of the max distance from two consecutive phases of the light curve in each band and the  number gaps larger than factorForDimensionGap 
 # Input:
 # data is a dictionary were the time and mag of all bands are stored.
@@ -284,111 +288,6 @@ def plotting(data,fittingParameters,period,label,zeroTimeRef,outDir):
     
     plt.savefig(str(outDir)+'/LcFitting_'+str(label)+'.pdf')
 
-def qualityCheck(time,period,factor1):
-    #period=param[0]
-    phase= ((time-time[0])/period)%1
-    indexSorted=np.argsort(phase)
-   
-    distances=[]
-    indexStart=[]
-    indexStop=[]
-    leftDistance=phase[indexSorted[0]]
-    rightDistance=1-phase[indexSorted[len(indexSorted)-1]]
-    for i in range(len(phase)-1):
-        dist=phase[indexSorted[i+1]]-phase[indexSorted[i]]
-        distances.append(dist)
-        
-        
-    #factor=sum(distances)/len(distances)*factor1
-    distancesTotal=distances
-    distancesTotal.append(leftDistance)
-    distancesTotal.append(rightDistance)
-    #factor=sum(distancesTotal)/len(distancesTotal)*factor1
-    maxDistance=max(distancesTotal)
-    factor = maxDistance*factor1
-    for i in range(len(phase)-1):
-        dist=phase[indexSorted[i+1]]-phase[indexSorted[i]]
-        distances.append(dist)
-        if (dist > factor):
-            indexStart.append(indexSorted[i])
-            indexStop.append(indexSorted[i+1])
-            
-    return maxDistance,len(indexStart)#,indexStart,indexStop
-
-def qualityCheck2(time,period):
-    
-    phase= ((time-time[0])/period)%1
-    indexSorted=np.argsort(phase)
-   
-    distances=[]
-    indexStart=[]
-    indexStop=[]
-    leftDistance=phase[indexSorted[0]]
-    rightDistance=1-phase[indexSorted[len(indexSorted)-1]]
-    sumDistances=0
-    for i in range(len(phase)-1):
-        dist=phase[indexSorted[i+1]]-phase[indexSorted[i]]
-        sumDistances=sumDistances+pow(dist,2)
-        distances.append(dist)
-        
-        
-    distancesTotal=distances
-    distancesTotal.append(leftDistance)
-    distancesTotal.append(rightDistance)
-    
-    #uniformity parameter
-    u=len(time)/(len(time)-1)*(1-sumDistances)
-    return u 
-
-
-def check(data,period,index,factor1):
-    time_u=data['timeu'][index['ind_notsaturated_u']]#time must be in days
-    time_g=data['timeg'][index['ind_notsaturated_g']]
-    time_r=data['timer'][index['ind_notsaturated_r']]
-    time_i=data['timei'][index['ind_notsaturated_i']]
-    time_z=data['timez'][index['ind_notsaturated_z']]
-    time_y=data['timey'][index['ind_notsaturated_y']]
-    maxGap_u,numberOfGaps_u=qualityCheck(time_u,period,factor1)
-    maxGap_g,numberOfGaps_g=qualityCheck(time_g,period,factor1)
-    maxGap_r,numberOfGaps_r=qualityCheck(time_r,period,factor1)
-    maxGap_i,numberOfGaps_i=qualityCheck(time_i,period,factor1)
-    maxGap_z,numberOfGaps_z=qualityCheck(time_z,period,factor1)
-    maxGap_y,numberOfGaps_y= qualityCheck(time_y,period,factor1)
-    uniformity_u=qualityCheck2(time_u,period)
-    uniformity_g=qualityCheck2(time_g,period)
-    uniformity_r=qualityCheck2(time_r,period)
-    uniformity_i=qualityCheck2(time_i,period)
-    uniformity_z=qualityCheck2(time_z,period)
-    uniformity_y= qualityCheck2(time_y,period)
-    
-    quality={'maxGap_u':maxGap_u,'maxGap_g':maxGap_g,'maxGap_r':maxGap_r,
-             'maxGap_i':maxGap_i,'maxGap_z':maxGap_z,'maxGap_y':maxGap_y,
-             'numberGaps_u':numberOfGaps_u,'numberGaps_g':numberOfGaps_g,'numberGaps_r':numberOfGaps_r,
-             'numberGaps_i':numberOfGaps_i,'numberGaps_z':numberOfGaps_z,'numberGaps_y':numberOfGaps_y,
-             'uniformity_u':uniformity_u,'uniformity_g':uniformity_g,'uniformity_r':uniformity_r,
-             'uniformity_i':uniformity_i,'uniformity_z':uniformity_z,'uniformity_y':uniformity_y}
-    
-    return quality
-#
-#def check2(data,period,index):
-#    time_u=data['timeu'][index['ind_notsaturated_u']]#time must be in days
-#    time_g=data['timeg'][index['ind_notsaturated_g']]
-#    time_r=data['timer'][index['ind_notsaturated_r']]
-#    time_i=data['timei'][index['ind_notsaturated_i']]
-#    time_z=data['timez'][index['ind_notsaturated_z']]
-#    time_y=data['timey'][index['ind_notsaturated_y']]
-#    uniformity_u=qualityCheck2(time_u,period)
-#    uniformity_g=qualityCheck2(time_g,period)
-#    uniformity_r=qualityCheck2(time_r,period)
-#    uniformity_i=qualityCheck2(time_i,period)
-#    uniformity_z=qualityCheck2(time_z,period)
-#    uniformity_y= qualityCheck2(time_y,period)
-#    
-#    quality={'uniformity_u':uniformity_u,'uniformity_g':uniformity_g,'uniformity_r':uniformity_r,
-#             'uniformity_i':uniformity_i,'uniformity_z':uniformity_z,'uniformity_y':uniformity_y}
-#    
-#    return quality
-
 
 
 
@@ -473,8 +372,7 @@ def computation(data,index,period,numberOfHarmonics,factorForDimensionGap,label,
     
     
     plotting(data,fitting,period,label,zeroTimeRef,outDir)
-    quality=check(data,period,index,factorForDimensionGap)
-#    quality2=check2(data,period,index)
+
     
     finalResult={'mean_u':meanMag_u,'mean_g':meanMag_g,'mean_r':meanMag_r,
                  'mean_i':meanMag_i,'mean_z':meanMag_z,'mean_y':meanMag_y,
@@ -482,25 +380,7 @@ def computation(data,index,period,numberOfHarmonics,factorForDimensionGap,label,
                  'ampl_i':ampl_i,'ampl_z':ampl_z,'ampl_y':ampl_y,
             'chi_u':fitting['chi_u'],'chi_g':fitting['chi_g'],'chi_r':fitting['chi_r'],
             'chi_i':fitting['chi_i'],'chi_z':fitting['chi_z'],'chi_y':fitting['chi_y'],
-            'fittingParametersAllband':fitting,
-                  'maxGapDimension_u':quality['maxGap_u'],
-                  'maxGapDimension_g':quality['maxGap_g'],
-                  'maxGapDimension_r':quality['maxGap_r'],
-                  'maxGapDimension_i':quality['maxGap_i'],
-                  'maxGapDimension_z':quality['maxGap_z'],
-                  'maxGapDimension_y':quality['maxGap_y'],
-                  'numberOfGaps_u':quality['numberGaps_u'],
-                  'numberOfGaps_g':quality['numberGaps_g'],
-                  'numberOfGaps_r':quality['numberGaps_r'],
-                  'numberOfGaps_i':quality['numberGaps_i'],
-                  'numberOfGaps_z':quality['numberGaps_z'],
-                  'numberOfGaps_y':quality['numberGaps_y'],
-                  'uniformity_u':quality['uniformity_u'],
-                  'uniformity_g':quality['uniformity_g'],
-                  'uniformity_r':quality['uniformity_r'],
-                  'uniformity_i':quality['uniformity_i'],
-                  'uniformity_z':quality['uniformity_z'],
-                  'uniformity_y':quality['uniformity_y']}
+            'fittingParametersAllband':fitting}
     
 
 #    finalResult2={'mean_u':meanMag_u,'mean_g':meanMag_g,'mean_r':meanMag_r,
