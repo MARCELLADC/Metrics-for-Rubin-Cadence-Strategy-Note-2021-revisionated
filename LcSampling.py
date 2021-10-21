@@ -71,28 +71,31 @@ def qualityCheck(time,period,factor1):
     return maxDistance,len(indexStart)#,indexStart,indexStop
 
 def qualityCheck2(time,period):
-    
-    phase= ((time-time[0])/period)%1
-    indexSorted=np.argsort(phase)
+#This is based on Madore and Freedman (Apj 2005), uniformity definition   
+    if(len(time))<=20:
+        phase= ((time-time[0])/period)%1
+        indexSorted=np.argsort(phase)
    
-    distances=[]
-    indexStart=[]
-    indexStop=[]
-    leftDistance=phase[indexSorted[0]]
-    rightDistance=1-phase[indexSorted[len(indexSorted)-1]]
-    sumDistances=0
-    for i in range(len(phase)-1):
-        dist=phase[indexSorted[i+1]]-phase[indexSorted[i]]
-        sumDistances=sumDistances+pow(dist,2)
-        distances.append(dist)
+        distances=[]
+        indexStart=[]
+        indexStop=[]
+        leftDistance=phase[indexSorted[0]]
+        rightDistance=1-phase[indexSorted[len(indexSorted)-1]]
+        sumDistances=0
+        for i in range(len(phase)-1):
+            dist=phase[indexSorted[i+1]]-phase[indexSorted[i]]
+            sumDistances=sumDistances+pow(dist,2)
+            distances.append(dist)
         
         
-    distancesTotal=distances
-    distancesTotal.append(leftDistance)
-    distancesTotal.append(rightDistance)
+        distancesTotal=distances
+        distancesTotal.append(leftDistance)
+        distancesTotal.append(rightDistance)
     
     #uniformity parameter
-    u=len(time)/(len(time)-1)*(1-sumDistances)
+        u=len(time)/(len(time)-1)*(1-sumDistances)
+    else:
+        u=999.    
     return u 
 
 def qualityCheck3(time,period):
