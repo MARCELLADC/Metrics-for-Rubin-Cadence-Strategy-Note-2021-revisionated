@@ -8,6 +8,12 @@ def main(data,period,index,factor1):
     time_i=data['timei'][index['ind_notsaturated_i']]
     time_z=data['timez'][index['ind_notsaturated_z']]
     time_y=data['timey'][index['ind_notsaturated_y']]
+    n_u=len(time_u)
+    n_g=len(time_g)
+    n_r=len(time_r)
+    n_i=len(time_i)
+    n_z=len(time_z)
+    n_y=len(time_y)                  
     maxGap_u,numberOfGaps_u=qualityCheck(time_u,period,factor1)
     maxGap_g,numberOfGaps_g=qualityCheck(time_g,period,factor1)
     maxGap_r,numberOfGaps_r=qualityCheck(time_r,period,factor1)
@@ -27,14 +33,14 @@ def main(data,period,index,factor1):
     uniformityKS_z=qualityCheck3(time_z,period)
     uniformityKS_y= qualityCheck3(time_y,period)
     
-    
-    finalResult={'maxGap_u':maxGap_u,'maxGap_g':maxGap_g,'maxGap_r':maxGap_r,
+    finalResult={'n_u':n_u,'n_g':n_g,'n_r':n_r,'n_u':n_u,'n_i':n_i,'n_z':n_z,'n_y':n_y,
+             'maxGap_u':maxGap_u,'maxGap_g':maxGap_g,'maxGap_r':maxGap_r,
              'maxGap_i':maxGap_i,'maxGap_z':maxGap_z,'maxGap_y':maxGap_y,
              'numberGaps_u':numberOfGaps_u,'numberGaps_g':numberOfGaps_g,'numberGaps_r':numberOfGaps_r,
              'numberGaps_i':numberOfGaps_i,'numberGaps_z':numberOfGaps_z,'numberGaps_y':numberOfGaps_y,
              'uniformity_u':uniformity_u,'uniformity_g':uniformity_g,'uniformity_r':uniformity_r,
              'uniformity_i':uniformity_i,'uniformity_z':uniformity_z,'uniformity_y':uniformity_y,
-             'uniformityKS_u':uniformityKS_u,'uniformityKS_g':uniformityKS_g,'uniformityKS_r':uniformityKS_r,
+            'uniformityKS_u':uniformityKS_u,'uniformityKS_g':uniformityKS_g,'uniformityKS_r':uniformityKS_r,
              'uniformityKS_i':uniformityKS_i,'uniformityKS_z':uniformityKS_z,'uniformityKS_y':uniformityKS_y
              }
     
