@@ -46,39 +46,43 @@ def main(data,period,index,factor1):
     
     return finalResult
 def qualityCheck(time,period,factor1):
+    if(len(time))>0:
     #period=param[0]
-    phase= ((time-time[0])/period)%1
-    indexSorted=np.argsort(phase)
+        phase= ((time-time[0])/period)%1
+        indexSorted=np.argsort(phase)
    
-    distances=[]
-    indexStart=[]
-    indexStop=[]
-    leftDistance=phase[indexSorted[0]]
-    rightDistance=1-phase[indexSorted[len(indexSorted)-1]]
-    for i in range(len(phase)-1):
-        dist=phase[indexSorted[i+1]]-phase[indexSorted[i]]
-        distances.append(dist)
+        distances=[]
+        indexStart=[]
+        indexStop=[]
+        leftDistance=phase[indexSorted[0]]
+        rightDistance=1-phase[indexSorted[len(indexSorted)-1]]
+        for i in range(len(phase)-1):
+            dist=phase[indexSorted[i+1]]-phase[indexSorted[i]]
+            distances.append(dist)
         
         
-    #factor=sum(distances)/len(distances)*factor1
-    distancesTotal=distances
-    distancesTotal.append(leftDistance)
-    distancesTotal.append(rightDistance)
-    #factor=sum(distancesTotal)/len(distancesTotal)*factor1
-    maxDistance=max(distancesTotal)
-    factor = maxDistance*factor1
-    for i in range(len(phase)-1):
-        dist=phase[indexSorted[i+1]]-phase[indexSorted[i]]
-        distances.append(dist)
-        if (dist > factor):
-            indexStart.append(indexSorted[i])
-            indexStop.append(indexSorted[i+1])
-            
-    return maxDistance,len(indexStart)#,indexStart,indexStop
+        #factor=sum(distances)/len(distances)*factor1
+        distancesTotal=distances
+        distancesTotal.append(leftDistance)
+        distancesTotal.append(rightDistance)
+        #factor=sum(distancesTotal)/len(distancesTotal)*factor1
+        maxDistance=max(distancesTotal)
+        factor = maxDistance*factor1
+        for i in range(len(phase)-1):
+            dist=phase[indexSorted[i+1]]-phase[indexSorted[i]]
+            distances.append(dist)
+            if (dist > factor):
+                indexStart.append(indexSorted[i])
+                indexStop.append(indexSorted[i+1])
+        a=len(indexStart)
+    else:
+        maxDistance=999.
+        a=999.   
+    return maxDistance,a#,indexStart,indexStop
 
 def qualityCheck2(time,period):
 #This is based on Madore and Freedman (Apj 2005), uniformity definition   
-    if(len(time))<=20:
+    if(len(time))<=20 and (len(time))>1:
         phase= ((time-time[0])/period)%1
         indexSorted=np.argsort(phase)
    
@@ -108,11 +112,13 @@ def qualityCheck3(time,period):
 #This is based on how a KS-test works: look at the cumulative distribution of observation dates,
 #    and compare to a perfectly uniform cumulative distribution.
 #    Perfectly uniform observations = 0, perfectly non-uniform = 1.
-   
-    phase= ((time-time[0])/period)%1
-    phase_sort=np.sort(phase)
-    n_cum = np.arange(1, len(phase) + 1) / float(len(phase))
-    D_max = np.max(np.abs(n_cum - phase_sort - phase_sort[0]))# ma in origine era phase_u_sort[1] ma non capisco il perché
+    if(len(time))>1:
+        phase= ((time-time[0])/period)%1
+        phase_sort=np.sort(phase)
+        n_cum = np.arange(1, len(phase) + 1) / float(len(phase))
+        D_max = np.max(np.abs(n_cum - phase_sort - phase_sort[0]))# ma in origine era phase_u_sort[1] ma non capisco il perché
+    else:
+        D_max=999.
     return D_max
 
 
