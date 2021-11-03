@@ -1,5 +1,7 @@
 #This metric use Gatspy (https://arxiv.org/abs/1502.01344)) to recover the period of the simulated temporal series. Produce a multipanel plot and return:
 #best period, period_model-best_period/best_period and period_model-best_period/best_period*1/number of cycles 
+#ATTENZIONE CALCOLA IL PERIODO CONSIDERANDO TUTTE LE VISITE
+
 import matplotlib.pyplot as plt 
 from gatspy import periodic
 import numpy as np
@@ -41,8 +43,9 @@ def main(mv,LcTeoLSST,LcTeoLSST_noised,index_notsaturated,label,path3):
     model.fit(LcTeoLSST_noised['time_all'][index_notsaturated['ind_notsaturated_all']],
               LcTeoLSST_noised['mag_all'][index_notsaturated['ind_notsaturated_all']],
               LcTeoLSST_noised['dmag_all'][index_notsaturated['ind_notsaturated_all']],
-              np.asarray(mv['filter'][index_notsaturated['ind_notsaturated_all']]))
+              mv['filter'][index_notsaturated['ind_notsaturated_all']])
     P = model.scores(periods)
+
     ax[1].set_xlim(minper_plot, maxper_plot)
     ax[1].set_title('Standard Periodogram in Each Band', fontsize=12)
     ax[1].yaxis.set_major_formatter(plt.NullFormatter())
@@ -57,8 +60,9 @@ def main(mv,LcTeoLSST,LcTeoLSST_noised,index_notsaturated,label,path3):
             ax[1].text(0.89, 1 + offset, band, fontsize=10, ha='right', va='top')
 
     LS_multi = periodic.LombScargleMultiband(Nterms_base=1, Nterms_band=0)
-    LS_multi.fit(LcTeoLSST_noised['time_all'],LcTeoLSST_noised['mag_all'],LcTeoLSST_noised['dmag_all'], mv['filter'])
+    LS_multi.fit(LcTeoLSST_noised['time_all'][index_notsaturated['ind_notsaturated_all']],LcTeoLSST_noised['mag_all'][index_notsaturated['ind_notsaturated_all']],LcTeoLSST_noised['dmag_all'][index_notsaturated['ind_notsaturated_all']], mv['filter'][index_notsaturated['ind_notsaturated_all']])
     P_multi = LS_multi.periodogram(periods)
+   
 
 
     periodogram_noise=np.median(P_multi)
@@ -69,7 +73,7 @@ def main(mv,LcTeoLSST,LcTeoLSST_noised,index_notsaturated,label,path3):
 
     fitLS_multi= periodic.LombScargleMultiband(fit_period=True)
     fitLS_multi.optimizer.period_range=(minper_opt, maxper_opt)
-    fitLS_multi.fit(LcTeoLSST_noised['time_all'],LcTeoLSST_noised['mag_all'],LcTeoLSST_noised['dmag_all'], mv['filter'])
+    fitLS_multi.fit(LcTeoLSST_noised['time_all'][index_notsaturated['ind_notsaturated_all']],LcTeoLSST_noised['mag_all'][index_notsaturated['ind_notsaturated_all']],LcTeoLSST_noised['dmag_all'][index_notsaturated['ind_notsaturated_all']], mv['filter'][index_notsaturated['ind_notsaturated_all']])
     best_per_temp=fitLS_multi.best_period
 
 
@@ -88,7 +92,7 @@ def main(mv,LcTeoLSST,LcTeoLSST_noised,index_notsaturated,label,path3):
     print(diffper)
     print(' DeltaP/P*1/number of cycle:')
     print(diffcicli)
-
+ 
     ax[2].plot(periods, P_multi, lw=1, color='gray')
 
     ax[2].set_title('Multiband Periodogram', fontsize=12)
